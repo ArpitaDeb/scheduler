@@ -1,6 +1,12 @@
 import React from "react";
 import "components/InterviewerListItem.scss";
 let classnames = require('classnames');
+
+/*
+selected:boolean - to determine if an interview is selected or not
+setInterviewer:function - sets the interviewer upon selection
+*/
+
 export default function InterviewerListItem(props) {
   const interlistitemClass = classnames("interviewers__item", {
     "interviewers__item--selected": props.selected
