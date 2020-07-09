@@ -42,7 +42,7 @@ const appointments = [
     interview: {
       student: "Maria Boucher",
       interviewer: {
-        id: 1,
+        id: 3,
         name: "Mildred Nazir",
         avatar: "https://i.imgur.com/T2WwVfS.png",
       }
@@ -83,6 +83,7 @@ export default function Application(props) {
       <section className="schedule">
         {/* Replace this with the schedule elements durint the "The Scheduler" activity. */
         appointments.map(appointment => {
+          console.log(appointment);
         return(
           <Appointment key={appointment.id} {...appointment} />
         );
