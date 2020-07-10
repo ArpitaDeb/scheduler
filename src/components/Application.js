@@ -24,20 +24,26 @@ export default function Application(props) {
       //console.log(all);
       //console.log(aptIntrvwr);
       //console.log(state.interviewers);
-      setState(function(prev) {
-        return ({ ...prev, days: daysRes.data, appointments: aptmntAPIRes.data, interviewers: aptIntrvwrRes });
-      }) 
-  },
-  )}, []);
+      setState(function (prev) {
+        return ({ ...prev, days: daysRes.data, appointments: aptmntAPIRes.data, interviewers: aptIntrvwrRes.data });
+      })
+    },
+    )
+  }, []);
 
   const appointments = getAppointmentsForDay(state, state.day);
   //const setDays = days => setState(prev => ({ ...prev, days}));
   const schedule = appointments.map((appointment) => {
-      console.log(appointment);
-    return(
-      <Appointment key={appointment.id} {...appointment} />
+    const interview = getInterview(state, appointment.interview);
+    return (
+      <Appointment
+        key={appointment.id}
+        id={appointment.id}
+        time={appointment.time}
+        interview={interview}
+      />
     );
-    });
+  });
   return (
     <main className="layout">
       <section className="sidebar">
@@ -52,7 +58,7 @@ export default function Application(props) {
           <DayList
             days={state.days}
             day={state.day}
-            setDay= {setDay}
+            setDay={setDay}
           />
         </nav>
         <img
@@ -62,7 +68,7 @@ export default function Application(props) {
         />
       </section>
       <section className="schedule">
-        {schedule} 
+        {schedule}
         <Appointment key="last" time="5pm" />
       </section>
     </main>

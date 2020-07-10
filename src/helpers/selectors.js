@@ -1,7 +1,7 @@
 export function getInterview(state, interview) {
   
-  //console.log(interview);
-  //console.log(state.interviewers);
+  console.log(interview);
+  console.log(state.interviewers);
   if (!interview) return null;
   const interviewerID = interview.interviewer;
   const interviewerData = state.interviewers[interviewerID];
