@@ -1,3 +1,12 @@
+export function getInterview(state, interview) {
+  
+  //console.log(interview);
+  //console.log(state.interviewers);
+  if (!interview) return null;
+  const interviewerID = interview.interviewer;
+  const interviewerData = state.interviewers[interviewerID];
+  return {...interview, interviewer: interviewerData};
+}
 
 export function getAppointmentsForDay(state, day) {
   let aptmnt = [];
