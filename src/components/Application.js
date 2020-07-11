@@ -6,7 +6,7 @@ import axios from 'axios';
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "../helpers/selectors";
 
 export default function Application(props) {
-  console.log(props);
+  //console.log(props);
   //console.log(props.children) setDay= {setDay(day)};
   const [state, setState] = useState({
     day: "Monday",
@@ -31,31 +31,32 @@ export default function Application(props) {
       })
     },
     )
+    //.catch(error => console.log(error));
   }, []);
 
   const appointments = getAppointmentsForDay(state, state.day);
   const interviewers = getInterviewersForDay(state, state.day);
   //q logical step is to ensure that the child can call the action with the correct data
   function bookInterview(id, interview) {
-    console.log("1st",id, interview);
+    //console.log("1st",id, interview);
     //q values copied from the existing appointment then what does id mean
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
     };
-    console.log("2nd", appointment);
+    //console.log("2nd", appointment);
     //q update pattern to replace the existing record with the matching id
     const appointments = {
       ...state.appointments,
       [id]: appointment
     };
-    console.log("3rd", appointments);
+    //console.log("3rd", appointments);
     
     const updateAptData = axios.put(`/api/appointments/${id}`, {interview});
     return Promise.resolve(updateAptData)
     .then(response => {
       console.log(response);
-      debugger;
+      //debugger;
       setState({
         ...state,
         appointments
@@ -63,11 +64,30 @@ export default function Application(props) {
       
     })
     .catch(error => console.log(error));
-    /*setState({
-      ...state,
-      appointments
-    })
-    */
+    //setState({...state, appointments});
+  }
+  const cancelInterview = (id) => {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    };
+    console.log("delete", appointment);
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    console.log("deleteD?", appointments);
+    const updateApt = axios.delete(`/api/appointments/${id}`);
+    return Promise.resolve(updateApt)
+    .then(response => {
+      console.log(response);
+      //debugger;
+      setState({
+        ...state,
+        appointments
+      })
+      })
+      .catch(error => console.log(error));
   }
   //const setDays = days => setState(prev => ({ ...prev, days}));
   const schedule = appointments.map((appointment) => {
@@ -80,6 +100,7 @@ export default function Application(props) {
         interview={interview}
         interviewers={interviewers}
         bookInterview={bookInterview}
+        cancelInterview={cancelInterview}
       />
     );
   });
