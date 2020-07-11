@@ -6,6 +6,7 @@ import axios from 'axios';
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "../helpers/selectors";
 
 export default function Application(props) {
+  console.log(props);
   //console.log(props.children) setDay= {setDay(day)};
   const [state, setState] = useState({
     day: "Monday",
@@ -14,9 +15,7 @@ export default function Application(props) {
     interviewers: {}
   });
   const setDay = day => setState({ ...state, day });
-  function bookInterview(id, interview) {
-    console.log(id, interview);
-  }
+  
   useEffect(() => {
     const daysAPI = axios.get("/api/days");
     const aptmntAPI = axios.get("/api/appointments");
@@ -36,6 +35,40 @@ export default function Application(props) {
 
   const appointments = getAppointmentsForDay(state, state.day);
   const interviewers = getInterviewersForDay(state, state.day);
+  //q logical step is to ensure that the child can call the action with the correct data
+  function bookInterview(id, interview) {
+    console.log("1st",id, interview);
+    //q values copied from the existing appointment then what does id mean
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+    console.log("2nd", appointment);
+    //q update pattern to replace the existing record with the matching id
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    console.log("3rd", appointments);
+    
+    const updateAptData = axios.put(`/api/appointments/${id}`, {interview});
+    return Promise.resolve(updateAptData)
+    .then(response => {
+      console.log(response);
+      debugger;
+      setState({
+        ...state,
+        appointments
+      })
+      
+    })
+    .catch(error => console.log(error));
+    /*setState({
+      ...state,
+      appointments
+    })
+    */
+  }
   //const setDays = days => setState(prev => ({ ...prev, days}));
   const schedule = appointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
