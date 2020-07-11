@@ -25,7 +25,11 @@ export default function Form(props) {
             onChange={(event) => setName(event.target.value)}
             placeholder="Enter Student Name"
           /*
-            This must be a controlled component
+            form component where the buttons are Kevin used:
+            {interviewer && name ?
+            <Button confirm onClick={save}>Save</Button> :
+            <Button confirm disabled onClick={save}>Save</Button>
+          }
           */
           />
         </form>

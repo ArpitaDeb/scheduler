@@ -14,6 +14,9 @@ export default function Application(props) {
     interviewers: {}
   });
   const setDay = day => setState({ ...state, day });
+  function bookInterview(id, interview) {
+    console.log(id, interview);
+  }
   useEffect(() => {
     const daysAPI = axios.get("/api/days");
     const aptmntAPI = axios.get("/api/appointments");
@@ -43,6 +46,7 @@ export default function Application(props) {
         time={appointment.time}
         interview={interview}
         interviewers={interviewers}
+        bookInterview={bookInterview}
       />
     );
   });
