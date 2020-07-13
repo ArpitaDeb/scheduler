@@ -8,7 +8,7 @@ export default function useApplicationData() {
     appointments: {},
     interviewers: {}
   });
-  const setDay = day => setState({ ...state, day });
+  const setDay = day => setState(prev => ({ ...prev, day }));
   
   useEffect(() => {
     const daysAPI = axios.get("/api/days");
@@ -49,12 +49,33 @@ export default function useApplicationData() {
       //debugger;
       setState({
         ...state,
-        appointments
+        appointments,
+        days: getSpotsRemaining(state.days, appointments)
       })
       
     })
-    .catch(error => console.log(error));
+    //.catch(error => console.log(error));
     //setState({...state, appointments});
+  }
+  const spotsRemaining = (day, appointments) => {
+    console.log("spot", day);
+    console.log("spots", appointments);
+    let freeSpots = 0;
+    let spots = day.appointments;
+    console.log("sp", spots);
+    for (const spot of spots) {
+      if (appointments[spot].interview === null) {
+        freeSpots++;
+      }
+    }
+    console.log(freeSpots);
+    return freeSpots;
+  };
+  const getSpotsRemaining = (days, appointments) => {
+    const updatedSpotsDays = days.map(day => ({
+      ...day, spots: spotsRemaining(day, appointments)
+    }));
+    return updatedSpotsDays;
   }
   const cancelInterview = (id) => {
     const appointment = {
@@ -74,15 +95,17 @@ export default function useApplicationData() {
       //debugger;
       setState({
         ...state,
-        appointments
+        appointments,
+        days: getSpotsRemaining(state.days, appointments)
       })
       })
-      .catch(error => console.log(error));
-  }
+      //.catch(error => console.log(error));
+  };
+
   return {
     state,
     setDay,
     bookInterview,
     cancelInterview
-  }
+  };
 }

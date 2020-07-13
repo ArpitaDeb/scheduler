@@ -10,7 +10,7 @@ import Confirm from "./Confirm";
 import Error from "./Error";
 
 export default function Appointment(props) {
-  console.log("index", props);
+  //console.log("index", props);
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
@@ -32,8 +32,15 @@ export default function Appointment(props) {
     transition(SAVING);
     props
       .bookInterview(props.id, interview)
-      .then((res) => res ? transition(ERROR_SAVE, true) : transition(SHOW))
-      .catch((error) => transition(ERROR_SAVE, true));
+      .then(() => { 
+        //console.log("then runs");
+        transition(SHOW);
+      })
+      
+      .catch((error) => {
+        transition(ERROR_SAVE, true);
+        //console.log("catch runs")
+      });
     //transition(SHOW)
   }
   function destroy(event) {
@@ -62,7 +69,7 @@ export default function Appointment(props) {
       {mode === CONFIRM && <Confirm message="Are you sure?" onCancel={back} onConfirm={() => destroy(props.id)} />}
       {mode === EDIT && <Form name={props.interview.student} interviewer={props.interview.interviewer.id} interviewers={props.interviewers} onSave={save} onCancel={back} />}
       {mode === ERROR_SAVE && <Error message="unable to save appointment" onClose={back} />}
-      {mode === ERROR_DELETE && <Error message="could not cancel to appointment" onClose={back} />}
+      {mode === ERROR_DELETE && <Error message="could not cancel the appointment" onClose={back} />}
     </article>
   );
 }
