@@ -42,14 +42,14 @@ export default function Appointment(props) {
         //console.log("catch runs")
       });
     //transition(SHOW)
-  }
+  };
   function destroy(event) {
     transition(DELETING, true);
     props
       .cancelInterview(props.id)
       .then(() => transition(EMPTY))
       .catch(() => transition(ERROR_DELETE, true))
-  }
+  };
 
   return (
     <article className="appointment">
@@ -68,7 +68,8 @@ export default function Appointment(props) {
       {mode === DELETING && <Status message="Deleting" />}
       {mode === CONFIRM && <Confirm message="Are you sure?" onCancel={back} onConfirm={() => destroy(props.id)} />}
       {mode === EDIT && <Form name={props.interview.student} interviewer={props.interview.interviewer.id} interviewers={props.interviewers} onSave={save} onCancel={back} />}
-      {mode === ERROR_SAVE && <Error message="unable to save appointment" onClose={back} />}
+      {mode === ERROR_SAVE && <Error message="unable to save appointment" onClose={back
+      } />}
       {mode === ERROR_DELETE && <Error message="could not cancel the appointment" onClose={back} />}
     </article>
   );

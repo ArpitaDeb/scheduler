@@ -6,15 +6,18 @@ export default function useVisualMode(initial) {
     //console.log('checking mode setting', newmode);
     setMode(newmode);
     if (replace) {
+      /*
       const newHistory = [...history];
       newHistory.pop();
       newHistory.push(newmode);
       setHistory(newHistory);
-      console.log(history);
+      */
+      setHistory(prev => ([...prev.slice(0, prev.length - 1), newmode]));
+      //console.log("updated", history);
     } else {
       //setHistory([...history, newmode]);
       setHistory(prev => ([...prev, newmode]));
-      console.log(history);
+      //console.log(history);
     }
   }
   const back = () => {
@@ -22,8 +25,13 @@ export default function useVisualMode(initial) {
       const updatedHistory = [...history];
       updatedHistory.pop();
       setHistory(updatedHistory);
-      console.log(updatedHistory);
+      /*
+      const elem = updatedHistory.pop();
+      setHistory([...updatedHistory]);
+      */
+      //console.log(updatedHistory);
       setMode(updatedHistory[updatedHistory.length - 1]);
+      //setMode(elem);
     }
   }
   return { mode, transition, back };
