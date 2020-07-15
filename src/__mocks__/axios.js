@@ -81,28 +81,33 @@ export default {
     }
   }),
   put: jest.fn(url => {
-    if (url === "/api/days") {
-      return Promise.resolve({
-        status: 204, 
-        statusText: "No Content" 
-      });
-    }
-
-    if (url === "/api/appointments") {
-      /* Resolve appointments data */
-      return Promise.resolve({
-        status: 204, 
-        statusText: "No Content" 
-      });
-    }
-
-    if (url === "/api/interviewers") {
-      /* Resolve interviewers data */
-      return Promise.resolve({
-        status: 204, 
-        statusText: "No Content" 
-      });
-    }
+    return Promise.resolve({
+      status: 204,
+      statusText: "No Content"
+    });
   })
-
 };
+  /*
+  //if (url === "/api/days") {
+    return Promise.resolve({
+      status: 204,
+      statusText: "No Content"
+    });
+  })
+  if (url === "/api/appointments") {
+         Resolve appointments data 
+        return Promise.resolve({
+          status: 204, 
+          statusText: "No Content" 
+        });
+      }
+  
+      if (url === "/api/interviewers") {
+        /* Resolve interviewers data 
+  return Promise.resolve({
+    status: 204,
+    statusText: "No Content"
+  });
+}
+}) 
+*/
