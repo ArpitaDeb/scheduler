@@ -10,7 +10,6 @@ import Confirm from "./Confirm";
 import Error from "./Error";
 
 export default function Appointment(props) {
-  //console.log("index", props);
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
@@ -24,6 +23,7 @@ export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
+
   function save(name, interviewer) {
     const interview = {
       student: name,
@@ -32,17 +32,14 @@ export default function Appointment(props) {
     transition(SAVING);
     props
       .bookInterview(props.id, interview)
-      .then(() => { 
-        //console.log("then runs");
+      .then(() => {
         transition(SHOW);
       })
-      
       .catch((error) => {
         transition(ERROR_SAVE, true);
-        //console.log("catch runs")
       });
-    //transition(SHOW)
   };
+
   function destroy(event) {
     transition(DELETING, true);
     props

@@ -11,11 +11,14 @@ describe("Appointments", () => {
     cy.get("[alt=Add]")
       .first()
       .click();
+
     //Enters student name
     cy.get("[data-testid=student-name-input]").type("Lydia Miller-Jones");
+
     //Chooses an interviewer
     cy.get("[alt='Sylvia Palmer']").click();
     cy.contains("Save").click();
+
     //Sees the booked appointment
     cy.contains(".appointment__card--show", "Lydia Miller-Jones");
     cy.contains(".appointment__card--show", "Sylvia Palmer");
@@ -25,15 +28,17 @@ describe("Appointments", () => {
     cy.get("[alt=Edit]")
       .first()
       .click({ force: true });
+
     //clear the input field before we type
     cy.get("[data-testid=student-name-input]").clear().type("Lydia Miller-Jones");
+
     //Chooses an interviewer
     cy.get("[alt='Tori Malcolm']").click();
     cy.contains("Save").click();
+
     //Sees the edited appointment
     cy.contains(".appointment__card--show", "Lydia Miller-Jones");
     cy.contains(".appointment__card--show", "Tori Malcolm");
-
   });
   it("should cancel an interview", () => {
     cy.get("[alt=Delete]")
@@ -41,9 +46,7 @@ describe("Appointments", () => {
     cy.contains("Confirm").click();
     cy.contains("Deleting").should("exist");
     cy.contains("Deleting").should("not.exist");
-
     cy.contains(".appointment__card--show", "Archie Cohen")
       .should("not.exist");
   });
-
 });
