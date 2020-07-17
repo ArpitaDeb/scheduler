@@ -1,12 +1,10 @@
 # Interview Scheduler
-![schedulerapp_feature.gif]
-(https://github.com/ArpitaDeb/scheduler/blob/master/docs/schedulerapp_feature.gif?raw=true)
+
+![schedulerapp_feature.gif](https://github.com/ArpitaDeb/scheduler/blob/master/docs/schedulerapp_feature.gif?raw=true)
 - Animated Gif of the functional scheduler app i.e. booking or cancelling an Interview, editing an appointment, and spots remaining feature.
-![error_save.png]
-(https://github.com/ArpitaDeb/scheduler/blob/master/docs/error_save.png?raw=true)
+![error_save.png](https://github.com/ArpitaDeb/scheduler/blob/master/docs/error_save.png?raw=true)
 - whenever we receive an error from the server, error_save and error_delete mode is displayed respectively.
-![error_delete.png]
-(https://github.com/ArpitaDeb/scheduler/blob/master/docs/error_delete.png?raw=true)
+![error_delete.png](https://github.com/ArpitaDeb/scheduler/blob/master/docs/error_delete.png?raw=true)
 
 ## Project Description
 - Interview Scheduler development focuses on a single page application (SPA) and built using React and latest tech stacks. Data is persisted by the API server using a PostgreSQL database.
