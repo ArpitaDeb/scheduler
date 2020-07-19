@@ -8,8 +8,8 @@ export default function useApplicationData() {
     appointments: {},
     interviewers: {}
   });
-  const setDay = day => setState(prev => ({ ...prev, day }));
-
+  
+// axios data request
   useEffect(() => {
     const daysAPI = axios.get("/api/days");
     const aptmntAPI = axios.get("/api/appointments");
@@ -21,6 +21,10 @@ export default function useApplicationData() {
     },
     )
   }, []);
+ // updates selected day 
+  const setDay = day => setState(prev => ({ ...prev, day }));
+  
+ // Book the interview appointment to the database
   function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
@@ -52,14 +56,15 @@ export default function useApplicationData() {
     }
     return freeSpots;
   };
-
+//depending on booking or deleting an interview appointment spots remaining gets updated
   const getSpotsRemaining = (days, appointments) => {
     const updatedSpotsDays = days.map(day => ({
       ...day, spots: spotsRemaining(day, appointments)
     }));
     return updatedSpotsDays;
   }
-
+  
+//Remove the interview appointment from the database
   const cancelInterview = (id) => {
     const appointment = {
       ...state.appointments[id],
@@ -80,7 +85,8 @@ export default function useApplicationData() {
         })
       })
   };
-
+  
+// returns these functions to be used to manage the state in other components
   return {
     state,
     setDay,
