@@ -38,7 +38,6 @@ export default function useApplicationData() {
     const updateAptData = axios.put(`/api/appointments/${id}`, { interview });
     return Promise.resolve(updateAptData)
       .then(response => {
-
         setState({
           ...state,
           appointments,
@@ -56,6 +55,7 @@ export default function useApplicationData() {
     }
     return freeSpots;
   };
+  
 //depending on booking or deleting an interview appointment spots remaining gets updated
   const getSpotsRemaining = (days, appointments) => {
     const updatedSpotsDays = days.map(day => ({
