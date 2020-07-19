@@ -16,7 +16,8 @@ export default function Form(props) {
     props.onCancel();
     reset()
   }
-
+  
+//validating student name is present and interviewer is selected
   function validate() {
     if (name === "") {
       setError("Student name cannot be blank");
