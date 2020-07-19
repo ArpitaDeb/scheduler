@@ -25,6 +25,10 @@ export default function Form(props) {
       return;
     }
     setError("");
+    if (!interviewer) {
+      setError("interviewer field needs to be selected");
+      return;
+    }
     props.onSave(name, interviewer);
   }
 
