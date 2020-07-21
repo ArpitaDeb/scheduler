@@ -9,6 +9,7 @@ import Status from "./Status";
 import Confirm from "./Confirm";
 import Error from "./Error";
 
+//All modes required for appointment
 export default function Appointment(props) {
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
@@ -23,7 +24,7 @@ export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
-
+  //handling error while saving appointment
   function save(name, interviewer) {
     const interview = {
       student: name,
@@ -40,6 +41,7 @@ export default function Appointment(props) {
       });
   };
 
+  //handling error while deleting appointment
   function destroy(event) {
     transition(DELETING, true);
     props
@@ -47,7 +49,7 @@ export default function Appointment(props) {
       .then(() => transition(EMPTY))
       .catch(() => transition(ERROR_DELETE, true))
   };
-
+  //Conditional rendering depending on each "mode"
   return (
     <article className="appointment" data-testid="appointment">
       <Header time={props.time} />

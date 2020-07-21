@@ -12,7 +12,7 @@ function reducer(state, action) {
         ...state, day: action.day
       }
     case SET_APPLICATION_DATA:
-      return { 
+      return {
         ...state,
         days: action.days,
         appointments: action.appointments,
@@ -52,7 +52,7 @@ const spotsRemaining = (day, appointments) => {
   return freeSpots;
 };
 
-// updated spots feature
+//depending on booking or deleting an interview appointment spots remaining gets updated
 const getSpotsRemaining = (days, appointments) => {
   const updatedSpotsDays = days.map(day => ({
     ...day, spots: spotsRemaining(day, appointments)
@@ -68,9 +68,10 @@ export default function useApplicationData() {
     interviewers: {}
   });
 
+  // updates selected day 
   const setDay = day => dispatch(({ type: SET_DAY, day }));
 
-// all axios data request  
+  // axios data request
   useEffect(() => {
     const daysAPI = axios.get("/api/days");
     const aptmntAPI = axios.get("/api/appointments");
@@ -86,7 +87,7 @@ export default function useApplicationData() {
       });
   }, []);
 
-
+  // Book the interview appointment to the database  
   function bookInterview(id, interview) {
     const updateAptData = axios.put(`/api/appointments/${id}`, { interview });
     return Promise.resolve(updateAptData)
@@ -99,6 +100,7 @@ export default function useApplicationData() {
       });
   }
 
+  //Remove the interview appointment from the database
   const cancelInterview = (id) => {
     const updateApt = axios.delete(`/api/appointments/${id}`);
     return Promise.resolve(updateApt)
@@ -111,6 +113,7 @@ export default function useApplicationData() {
       });
   };
 
+  // returns these functions to be used to manage the state in other components
   return {
     state,
     setDay,

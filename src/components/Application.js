@@ -6,6 +6,7 @@ import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "../h
 import useApplicationData from "../hooks/useApplicationData";
 
 export default function Application(props) {
+  // Import state management functions
   const {
     state,
     setDay,
@@ -13,6 +14,7 @@ export default function Application(props) {
     cancelInterview
   } = useApplicationData();
 
+  // Build schedule depending on received data
   const interviewers = getInterviewersForDay(state, state.day);
 
   const appointments = getAppointmentsForDay(state, state.day).map(

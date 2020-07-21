@@ -1,9 +1,12 @@
+//returns an interview object containing interviewer details
 export function getInterview(state, interview) {
   if (!interview) return null;
   const interviewerID = interview.interviewer;
   const interviewerData = state.interviewers[interviewerID];
   return { ...interview, interviewer: interviewerData };
 }
+
+//return interviewers array for any given day 
 export function getInterviewersForDay(state, day) {
   let aptmnt = [];
   let intrvwrDay = [];
@@ -19,10 +22,10 @@ export function getInterviewersForDay(state, day) {
       }
     }
   }
-
   return intrvwrDay;
 };
 
+//return appointments array for given day
 export function getAppointmentsForDay(state, day) {
   let aptmnt = [];
   let aptmntvalue = [];
@@ -38,7 +41,6 @@ export function getAppointmentsForDay(state, day) {
       }
     }
   }
-
   return aptmntvalue;
 };
 
