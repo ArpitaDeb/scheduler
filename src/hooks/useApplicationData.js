@@ -1,84 +1,114 @@
-import { useState, useEffect } from "react";
+import { useReducer, useEffect } from "react";
 import axios from 'axios';
 
+const SET_DAY = "SET_DAY";
+const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
+const SET_INTERVIEW = "SET_INTERVIEW";
+
+function reducer(state, action) {
+  switch (action.type) {
+    case SET_DAY:
+      return {
+        ...state, day: action.day
+      }
+    case SET_APPLICATION_DATA:
+      return { 
+        ...state,
+        days: action.days,
+        appointments: action.appointments,
+        interviewers: action.interviewers
+      }
+    case SET_INTERVIEW: {
+      const appointment = {
+        ...state.appointments[action.id],
+        interview: action.interview
+      };
+      const appointments = {
+        ...state.appointments,
+        [action.id]: appointment
+      };
+      console.log(appointment, getSpotsRemaining(state.days, appointments));
+      return {
+        ...state,
+        appointments,
+        days: getSpotsRemaining(state.days, appointments)
+      }
+    }
+
+    default:
+      throw new Error(
+        `Tried to reduce with unsupported action type: ${action.type}`
+      );
+  }
+}
+const spotsRemaining = (day, appointments) => {
+  let freeSpots = 0;
+  const spots = day.appointments;
+  for (const spot of spots) {
+    if (appointments[spot].interview === null) {
+      freeSpots++;
+    }
+  }
+  return freeSpots;
+};
+
+// updated spots feature
+const getSpotsRemaining = (days, appointments) => {
+  const updatedSpotsDays = days.map(day => ({
+    ...day, spots: spotsRemaining(day, appointments)
+  }));
+  return updatedSpotsDays;
+}
+
 export default function useApplicationData() {
-  const [state, setState] = useState({
+  const [state, dispatch] = useReducer(reducer, {
     day: "Monday",
     days: [],
     appointments: {},
     interviewers: {}
   });
-  const setDay = day => setState(prev => ({ ...prev, day }));
 
+  const setDay = day => dispatch(({ type: SET_DAY, day }));
+
+// all axios data request  
   useEffect(() => {
     const daysAPI = axios.get("/api/days");
     const aptmntAPI = axios.get("/api/appointments");
     const aptIntrvwr = axios.get("/api/interviewers");
-    Promise.all([daysAPI, aptmntAPI, aptIntrvwr]).then(([daysRes, aptmntAPIRes, aptIntrvwrRes]) => {
-      setState(function (prev) {
-        return ({ ...prev, days: daysRes.data, appointments: aptmntAPIRes.data, interviewers: aptIntrvwrRes.data });
-      })
-    },
-    )
+    Promise.all([daysAPI, aptmntAPI, aptIntrvwr])
+      .then(([daysRes, aptmntAPIRes, aptIntrvwrRes]) => {
+        dispatch({
+          type: SET_APPLICATION_DATA,
+          days: daysRes.data,
+          appointments: aptmntAPIRes.data,
+          interviewers: aptIntrvwrRes.data
+        });
+      });
   }, []);
-  function bookInterview(id, interview) {
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview }
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
 
+
+  function bookInterview(id, interview) {
     const updateAptData = axios.put(`/api/appointments/${id}`, { interview });
     return Promise.resolve(updateAptData)
       .then(response => {
-
-        setState({
-          ...state,
-          appointments,
-          days: getSpotsRemaining(state.days, appointments)
+        dispatch({
+          type: SET_INTERVIEW,
+          id,
+          interview
         })
-      })
-  }
-  const spotsRemaining = (day, appointments) => {
-    let freeSpots = 0;
-    const spots = day.appointments;
-    for (const spot of spots) {
-      if (appointments[spot].interview === null) {
-        freeSpots++;
-      }
-    }
-    return freeSpots;
-  };
-
-  const getSpotsRemaining = (days, appointments) => {
-    const updatedSpotsDays = days.map(day => ({
-      ...day, spots: spotsRemaining(day, appointments)
-    }));
-    return updatedSpotsDays;
+      });
   }
 
   const cancelInterview = (id) => {
-    const appointment = {
-      ...state.appointments[id],
-      interview: null
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
-
     const updateApt = axios.delete(`/api/appointments/${id}`);
     return Promise.resolve(updateApt)
       .then(response => {
-        setState({
-          ...state,
-          appointments,
-          days: getSpotsRemaining(state.days, appointments)
-        })
-      })
+        dispatch({
+          type: SET_INTERVIEW,
+          id,
+          interview: null
+        });
+      });
   };
 
   return {

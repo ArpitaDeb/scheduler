@@ -6,10 +6,10 @@ import Application from "components/Application";
 
 afterEach(cleanup);
 describe("Application", () => {
-  xit("renders without crashing", () => {
+  it("renders without crashing", () => {
     render(<Application />);
   });
-  xit("defaults to Monday and changes the schedule when a new day is selected", () => {
+  it("defaults to Monday and changes the schedule when a new day is selected", () => {
     const { getByText } = render(<Application />);
 
     return waitForElement(() => getByText("Monday")).then(() => {
@@ -18,7 +18,7 @@ describe("Application", () => {
     });
 
   });
-  xit("changes the schedule when a new day is selected", () => {
+  it("changes the schedule when a new day is selected", () => {
     const { getByText } = render(<Application />);
 
     return waitForElement(() => getByText("Monday")).then(() => {
