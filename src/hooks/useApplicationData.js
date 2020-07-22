@@ -76,6 +76,13 @@ export default function useApplicationData() {
     const daysAPI = axios.get("/api/days");
     const aptmntAPI = axios.get("/api/appointments");
     const aptIntrvwr = axios.get("/api/interviewers");
+    const exampleSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+    exampleSocket.onopen = function (event) {
+      exampleSocket.send("ping");
+    };
+    exampleSocket.onmessage = function (event) {
+      console.log("Message Received: ", event.data);
+    }
     Promise.all([daysAPI, aptmntAPI, aptIntrvwr])
       .then(([daysRes, aptmntAPIRes, aptIntrvwrRes]) => {
         dispatch({
